@@ -3,3 +3,6 @@
 Packages/
 *.xcodeproj
 .DS_Store
+.obsidian/
+openspec/
+tickets/
