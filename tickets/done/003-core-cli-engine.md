@@ -10,11 +10,11 @@ Implement the core CLI pipeline and `agy` executor using Test-Driven Development
 * **Expected Behavior:** A tested core engine loads markdown style files, builds unified prompts with `system.md`, executes `agy`, handles errors, and returns cleaned output.
 
 ### 3. Proposed Solution / Acceptance Criteria
-- [ ] Implement unit tests first (using `swift test`) for prompt composition, template discovery, and CLI execution.
-- [ ] Implement prompt builder combining `system.md`, selected style template, and the raw input text.
-- [ ] Implement `agy` runner with timeout management and availability health checks.
-- [ ] Gracefully handle missing `agy` binary or CLI failures with structured error returns.
-- [ ] Provide a CLI entry point for command-line testing (`korewrite --style polite --text "..."`).
+- [x] Implement unit tests first (using `swift test`) for prompt composition, template discovery, and CLI execution.
+- [x] Implement prompt builder combining `system.md`, selected style template, and the raw input text.
+- [x] Implement `agy` runner with timeout management and availability health checks.
+- [x] Gracefully handle missing `agy` binary or CLI failures with structured error returns.
+- [x] Provide a CLI entry point for command-line testing (`korewrite --style polite --text "..."`).
 
 ### 4. Technical Context / Notes
 * **Affected Areas:** Core CLI module, tests directory.
