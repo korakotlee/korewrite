@@ -37,11 +37,36 @@ public struct BundledTemplates {
     - Deliver the core point directly in the fewest possible words without losing crucial context or nuance.
     """
 
+    public static let sriburapaPrompt: String = """
+    Apply the refined, romantic, and dignified literary prose style of Sriburapa (Kulap Saipradit).
+    - Employ elegant, rhythmic Thai sentence structures with emotional depth and moral conviction.
+    - Choose classic, poetic vocabulary with timeless resonance.
+    - Maintain profound sincerity and dignified humanistic grace.
+    """
+
+    public static let storyPrompt: String = """
+    Apply an engaging, cinematic, and narrative storytelling style.
+    - Frame ideas with vivid sensory details, compelling progression, and strong narrative voice.
+    - Use dynamic pacing to build curiosity, tension, and memorable insights.
+    - Transform plain descriptions into lively, evocative prose.
+    """
+
+    public static let thaiOfficialPrompt: String = """
+    Apply a formal, structured, and authoritative Thai administrative and official document style (หนังสือราชการ).
+    - Use formal Thai bureaucratic syntax, standard official vocabulary, and precise administrative conventions.
+    - Maintain utmost clarity, diplomatic neutrality, and respectful decorum.
+    - Organize paragraphs hierarchically with standard governmental phrasing and transitions.
+    """
+
     public static let all: [String: String] = [
         "system": systemPrompt,
         "polite": politePrompt,
         "professional": professionalPrompt,
         "casual": casualPrompt,
-        "concise": concisePrompt
+        "concise": concisePrompt,
+        "sriburapa": sriburapaPrompt,
+        "story": storyPrompt,
+        "thai-official": thaiOfficialPrompt
     ]
 }
+
