@@ -10,12 +10,12 @@ Create the sample prompt library files (`system.md`, `polite.md`, `professional.
 * **Expected Behavior:** KoRewrite supplies bundled starter prompts for speech-to-text post-processing and tone adjustments, with automated initial copying to `~/.korewrite/`.
 
 ### 3. Proposed Solution / Acceptance Criteria
-- [ ] Create `templates/system.md` containing global instructions to fix speech-to-text artifacts, homophones, typos, and punctuation errors.
-- [ ] Create `templates/polite.md` for courteous, considerate communication.
-- [ ] Create `templates/professional.md` for formal workplace email and documentation.
-- [ ] Create `templates/casual.md` for conversational, friendly messaging.
-- [ ] Create `templates/concise.md` for direct, high-signal brevity.
-- [ ] Ensure prompt loader dynamically reads `~/.korewrite/*.md` at runtime so users can add custom styles.
+- [x] Create `templates/system.md` containing global instructions to fix speech-to-text artifacts, homophones, typos, and punctuation errors.
+- [x] Create `templates/polite.md` for courteous, considerate communication.
+- [x] Create `templates/professional.md` for formal workplace email and documentation.
+- [x] Create `templates/casual.md` for conversational, friendly messaging.
+- [x] Create `templates/concise.md` for direct, high-signal brevity.
+- [x] Ensure prompt loader dynamically reads `~/.korewrite/*.md` at runtime so users can add custom styles.
 
 ### 4. Technical Context / Notes
 * **Affected Areas:** `templates/`, configuration loader module.
