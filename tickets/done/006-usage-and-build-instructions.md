@@ -10,12 +10,12 @@ Write comprehensive build instructions, local development workflow, and test run
 * **Expected Behavior:** `USAGE.md` contains clear, step-by-step developer instructions to build binaries, run automated test suites, install Quick Actions to macOS Services, and test live rewriting.
 
 ### 3. Proposed Solution / Acceptance Criteria
-- [ ] Document prerequisites and required macOS permissions (Accessibility).
-- [ ] Provide command to build the project from source (`swift build -c release`).
-- [ ] Provide command to execute automated unit and integration tests (`swift test`).
-- [ ] Detail the one-line installer command to install/update Services in `~/Library/Services/`.
-- [ ] Document how to add custom prompt files in `~/.korewrite/`.
-- [ ] Provide troubleshooting steps for `agy` detection and permission errors.
+- [x] Document prerequisites and required macOS permissions (Accessibility).
+- [x] Provide command to build the project from source (`swift build -c release`).
+- [x] Provide command to execute automated unit and integration tests (`swift test`).
+- [x] Detail the one-line installer command to install/update Services in `~/Library/Services/`.
+- [x] Document how to add custom prompt files in `~/.korewrite/`.
+- [x] Provide troubleshooting steps for `agy` detection and permission errors.
 
 ### 4. Technical Context / Notes
 * **Affected Areas:** `USAGE.md`.
