@@ -14,6 +14,7 @@ struct PromptBuilderTests {
             inputText: inputText
         )
 
+        #expect(assembled.hasPrefix("/rewrite\n\n"))
         #expect(assembled.contains(systemPrompt))
         #expect(assembled.contains(stylePrompt))
         #expect(assembled.contains(inputText))

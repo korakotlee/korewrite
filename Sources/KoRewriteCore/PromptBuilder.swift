@@ -12,6 +12,8 @@ public struct PromptBuilder: Sendable {
         }
 
         return """
+/rewrite
+
 [System Directives]
 \(systemPrompt.trimmingCharacters(in: .whitespacesAndNewlines))
 

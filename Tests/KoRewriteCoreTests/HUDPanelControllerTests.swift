@@ -1,6 +1,7 @@
 import Testing
 import AppKit
 import SwiftUI
+import os
 @testable import KoRewriteCore
 
 @Suite struct HUDPanelControllerTests {
@@ -63,5 +64,74 @@ import SwiftUI
         ]
         let diffView = FlowDiffView(segments: segments)
         _ = NSHostingController(rootView: diffView).view
+    }
+
+    @MainActor
+    @Test func testKeyEventHandling() {
+        let copyLock = OSAllocatedUnfairLock(initialState: false)
+        let applyLock = OSAllocatedUnfairLock(initialState: false)
+        let cancelLock = OSAllocatedUnfairLock(initialState: false)
+
+        let state = HUDViewState(
+            onApply: { _ in applyLock.withLock { $0 = true } },
+            onCancel: { cancelLock.withLock { $0 = true } },
+            onCopy: { _ in copyLock.withLock { $0 = true } }
+        )
+        let controller = HUDPanelController(state: state)
+        _ = controller.getOrCreatePanel()
+
+        // 1. Cmd+C in preview state
+        state.showPreview(originalText: "old", rewrittenText: "new")
+        let cmdCEvent = NSEvent.keyEvent(
+            with: .keyDown,
+            location: .zero,
+            modifierFlags: .command,
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            characters: "c",
+            charactersIgnoringModifiers: "c",
+            isARepeat: false,
+            keyCode: 8
+        )!
+        let handledCmdC = controller.handleKeyEvent(cmdCEvent)
+        #expect(handledCmdC == nil)
+        #expect(copyLock.withLock { $0 } == true)
+
+        // 2. Return in preview state
+        state.showPreview(originalText: "old", rewrittenText: "new")
+        let returnEvent = NSEvent.keyEvent(
+            with: .keyDown,
+            location: .zero,
+            modifierFlags: [],
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            characters: "\r",
+            charactersIgnoringModifiers: "\r",
+            isARepeat: false,
+            keyCode: 36
+        )!
+        let handledReturn = controller.handleKeyEvent(returnEvent)
+        #expect(handledReturn == nil)
+        #expect(applyLock.withLock { $0 } == true)
+
+        // 3. Esc in loading state
+        state.startLoading(originalText: "test")
+        let escEvent = NSEvent.keyEvent(
+            with: .keyDown,
+            location: .zero,
+            modifierFlags: [],
+            timestamp: 0,
+            windowNumber: 0,
+            context: nil,
+            characters: "\u{1B}",
+            charactersIgnoringModifiers: "\u{1B}",
+            isARepeat: false,
+            keyCode: 53
+        )!
+        let handledEsc = controller.handleKeyEvent(escEvent)
+        #expect(handledEsc == nil)
+        #expect(cancelLock.withLock { $0 } == true)
     }
 }

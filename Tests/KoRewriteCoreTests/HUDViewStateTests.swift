@@ -51,4 +51,27 @@ import os
         #expect(result == true)
         #expect(state.status == .idle)
     }
+
+    @Test func testCopyCallbackAndClipboardInvocation() {
+        final class MockClipboard: ClipboardManaging, @unchecked Sendable {
+            var copiedText: String?
+            func snapshot() -> [PasteboardItemSnapshot] { [] }
+            func copyText(_ text: String) { copiedText = text }
+            func restoreSnapshot(_ snapshot: [PasteboardItemSnapshot]) {}
+        }
+
+        let lock = OSAllocatedUnfairLock(initialState: Optional<String>.none)
+        let mockClipboard = MockClipboard()
+        let state = HUDViewState(onCopy: { text in
+            lock.withLock { $0 = text }
+        })
+
+        state.showPreview(originalText: "Draft text", rewrittenText: "Polished text")
+        state.copyText(clipboard: mockClipboard)
+
+        let result = lock.withLock { $0 }
+        #expect(result == "Polished text")
+        #expect(mockClipboard.copiedText == "Polished text")
+        #expect(state.status == .idle)
+    }
 }

@@ -87,7 +87,7 @@ public final class HUDPanelController: NSObject, NSWindowDelegate {
         })
     }
 
-    /// Sets up local event monitor to guarantee Return/Esc key interception.
+    /// Sets up local event monitor to guarantee Return/Esc/Cmd+C key interception.
     private func setupKeyEventMonitor() {
         guard eventMonitor == nil else { return }
 
@@ -96,22 +96,36 @@ public final class HUDPanelController: NSObject, NSWindowDelegate {
                 return event
             }
 
-            // 53 is Esc keycode, 36 is Return, 76 is Keypad Enter
-            switch event.keyCode {
-            case 53:
-                self.state.cancel()
+            return self.handleKeyEvent(event)
+        }
+    }
+
+    /// Processes key down events for shortcuts: Esc (cancel), Return (apply), Cmd+C (copy).
+    @discardableResult
+    public func handleKeyEvent(_ event: NSEvent) -> NSEvent? {
+        // 53 is Esc keycode, 36 is Return, 76 is Keypad Enter, 8 is 'c'
+        if event.keyCode == 8 && event.modifierFlags.contains(.command) {
+            if case .preview = self.state.status {
+                self.state.copyText()
                 self.dismiss()
                 return nil
-            case 36, 76:
-                if case .preview = self.state.status {
-                    self.state.apply()
-                    self.dismiss()
-                    return nil
-                }
-                return event
-            default:
-                return event
             }
+        }
+
+        switch event.keyCode {
+        case 53:
+            self.state.cancel()
+            self.dismiss()
+            return nil
+        case 36, 76:
+            if case .preview = self.state.status {
+                self.state.apply()
+                self.dismiss()
+                return nil
+            }
+            return event
+        default:
+            return event
         }
     }
 

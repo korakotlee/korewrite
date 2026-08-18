@@ -76,7 +76,7 @@ swift build -c release
 
 # Install CLI binary to ~/.local/bin
 mkdir -p ~/.local/bin
-cp .build/release/korewrite ~/.local/bin/korewrite
+When I click the copy button, the dialog page UD is still present, but it clear the screen, but it's still display, I have to click the cancel again. 
 ```
 
 ### 2. Register macOS Services

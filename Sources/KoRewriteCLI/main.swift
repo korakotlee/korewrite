@@ -167,6 +167,13 @@ struct KoRewriteCLI {
             }
         }
 
+        state.onCopy = { @Sendable _ in
+            Task { @MainActor in
+                hudController.dismiss()
+                exit(0)
+            }
+        }
+
         hudController.show()
         state.startLoading(originalText: text)
 

@@ -216,6 +216,16 @@ public struct DiffPreviewHUDView: View {
             Spacer()
 
             if case .preview = state.status {
+                Button(action: { state.copyText() }) {
+                    HStack(spacing: 4) {
+                        Text("Copy")
+                        Text("⌘C")
+                            .font(HUDTheme.captionFont)
+                            .foregroundColor(.secondary)
+                    }
+                }
+                .keyboardShortcut("c", modifiers: .command)
+
                 Button(action: { state.apply() }) {
                     HStack(spacing: 4) {
                         Text("Apply Rewrite")
