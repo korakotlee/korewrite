@@ -1,0 +1,54 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-release:
+    name: Build and Release
+    runs-on: macos-14
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Show Swift Version
+        run: swift --version
+
+      - name: Build Release Binary
+        run: swift build -c release
+
+      - name: Package Release Artifacts
+        run: |
+          VERSION="${GITHUB_REF_NAME}"
+          ARCHIVE_NAME="korewrite-${VERSION}-macos-arm64.tar.gz"
+          
+          mkdir -p dist
+          cp .build/release/korewrite dist/
+          if [ -d "templates" ]; then
+            cp -r templates dist/
+          fi
+          if [ -d "scripts" ]; then
+            cp -r scripts dist/
+          fi
+          
+          cd dist
+          tar -czvf "../${ARCHIVE_NAME}" *
+          cd ..
+          
+          shasum -a 256 "${ARCHIVE_NAME}" > "${ARCHIVE_NAME}.sha256"
+          echo "ARCHIVE_NAME=${ARCHIVE_NAME}" >> $GITHUB_ENV
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            ${{ env.ARCHIVE_NAME }}
+            ${{ env.ARCHIVE_NAME }}.sha256
+          generate_release_notes: true
+          draft: false
+          prerelease: false

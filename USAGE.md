@@ -14,6 +14,7 @@ Comprehensive developer workflow, build instructions, test run guide, macOS Serv
 - [6. CLI Commands & Interactive HUD](#6-cli-commands--interactive-hud)
 - [7. Custom Prompt Template Management](#7-custom-prompt-template-management)
 - [8. Troubleshooting & Diagnostics](#8-troubleshooting--diagnostics)
+- [9. CI/CD & Automated GitHub Releases](#9-cicd--automated-github-releases)
 
 ---
 
@@ -288,3 +289,59 @@ KoRewrite logs execution details to standard error and system logs:
 # Run with debug verbosity
 korewrite --style polite --text "test input" --verbose
 ```
+
+---
+
+## 9. CI/CD & Automated GitHub Releases
+
+KoRewrite includes a GitHub Actions workflow (`.github/workflows/release.yml`) that automatically builds, packages, and attaches release artifacts whenever a semantic version tag is pushed.
+
+### Triggering a Release
+
+1. Ensure the working tree is clean and committed on `main`:
+   ```bash
+   git status
+   ```
+
+2. Create a signed or annotated Git version tag:
+   ```bash
+   git tag -a v0.1.0 -m "Release v0.1.0"
+   ```
+
+3. Push the tag to GitHub:
+   ```bash
+   git push origin v0.1.0
+   ```
+
+### What GitHub Actions Does
+
+When a `v*` tag is pushed:
+- Checks out the repository on `macos-14`.
+- Compiles the optimized release binary via `swift build -c release`.
+- Packages `korewrite`, bundled `templates/`, and helper scripts into `korewrite-v<VERSION>-macos-arm64.tar.gz`.
+- Generates a SHA-256 checksum file (`.sha256`).
+- Creates a new GitHub Release with automatically generated release notes and attached archive assets.
+
+### Installing Pre-built Release Binary
+
+End users can download and install pre-built release bundles directly:
+
+```bash
+# Download and extract the release archive
+tar -xzvf korewrite-v0.1.0-macos-arm64.tar.gz
+
+# Move binary to local bin
+mkdir -p ~/.local/bin
+cp korewrite ~/.local/bin/
+
+# Ensure ~/.local/bin is in your PATH
+export PATH="$HOME/.local/bin:$PATH"
+
+# Initialize default prompt templates
+korewrite --init-templates
+
+# Install macOS Quick Action Services
+korewrite --install-services
+```
+
+
