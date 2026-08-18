@@ -38,6 +38,8 @@ KoRewrite is a native macOS utility that polishes speech-to-text transcriptions,
 - **Local AI Execution**: Powered by your local Antigravity (`agy`) CLI engine with zero telemetry and complete privacy.
 - **Multilingual Support**: Out-of-the-box presets for English and Thai styles (Polite, Professional, Concise, Casual, Sriburapa, Story, and Thai Official).
 
+![alt text](docs/image.png)
+
 ---
 
 ## Architecture
@@ -176,28 +178,62 @@ korewrite --refresh
 
 ---
 
-## Included Prompt Presets
+## Prompt Presets & Customization (`~/.korewrite`)
 
-| Style | Purpose & Target Tone |
-| :--- | :--- |
-| **`polite`** | Courteous, respectful, and considerate phrasing for workplace communication. |
-| **`professional`** | Polished, articulate, and clear business communication. |
-| **`concise`** | High-impact editing that removes fluff and redundant verbiage. |
-| **`casual`** | Friendly, approachable, and natural conversation. |
-| **`sriburapa`** | Literary prose inspired by Kulap Saipradit (Sriburapa). |
-| **`story`** | Vivid, narrative-driven storytelling style. |
-| **`thai-official`** | Formal and bureaucratic Thai administrative tone. |
+All prompt templates are stored as plain Markdown files in `~/.korewrite/`. You can navigate to this directory to inspect how existing styles are structured, tweak their prompts, or create entirely new rewrite presets.
 
-To add a custom style, create `~/.korewrite/[my-style].md` with optional YAML frontmatter for display name:
+### Included Styles
+
+| Style | File | Purpose & Target Tone |
+| :--- | :--- | :--- |
+| **`polite`** | `~/.korewrite/polite.md` | Courteous, respectful, and considerate phrasing for workplace communication. |
+| **`professional`** | `~/.korewrite/professional.md` | Polished, articulate, and clear business communication. |
+| **`concise`** | `~/.korewrite/concise.md` | High-impact editing that removes fluff and redundant verbiage. |
+| **`casual`** | `~/.korewrite/casual.md` | Friendly, approachable, and natural conversation. |
+| **`sriburapa`** | `~/.korewrite/sriburapa.md` | Literary prose inspired by Kulap Saipradit (Sriburapa). |
+| **`story`** | `~/.korewrite/story.md` | Vivid, narrative-driven storytelling style. |
+| **`thai-official`** | `~/.korewrite/thai-official.md` | Formal and bureaucratic Thai administrative tone. |
+
+### Inspecting & Modifying Existing Prompts
+
+Open any template in `~/.korewrite/` with your preferred editor to view or tune its instructions:
+
+```bash
+# View all installed prompt templates
+ls -la ~/.korewrite
+
+# Inspect or edit a specific style
+nano ~/.korewrite/professional.md
+```
+
+### Adding New Custom Styles
+
+To add a new rewrite style, create a new `.md` file in `~/.korewrite/` (e.g. `~/.korewrite/executive.md`). You can optionally provide a custom display name using YAML frontmatter:
 
 ```markdown
 ---
 name: KoRewrite - Executive Brief
 ---
-Summarize and polish for executive communication.
+# Role: Executive Brief Rewriter
+
+Rewrite the selected text for senior leadership:
+- Lead directly with key outcomes and decisions.
+- Strip out low-level technical details and redundant filler.
+- Keep phrasing decisive, concise, and structured.
 ```
 
-Then run `korewrite --refresh` to immediately update your macOS Quick Actions menu.
+- **Frontmatter**: `name:` (or `displayName:`) controls how the action appears in the right-click Services menu. If omitted, KoRewrite automatically derives a clean name from the filename (e.g., `bullet-summary.md` becomes `KoRewrite - Bullet Summary`).
+- **Prompt Body**: Everything below the frontmatter is passed to the AI engine as style guidelines.
+
+### Synchronizing Changes (`korewrite --refresh`)
+
+Whenever you add, modify, or delete templates in `~/.korewrite/`, run:
+
+```bash
+korewrite --refresh
+```
+
+This command scans `~/.korewrite/`, regenerates your macOS Quick Actions in `~/Library/Services/`, prunes any removed workflows, and flushes the system Services cache so your context menu updates immediately.
 
 ---
 
