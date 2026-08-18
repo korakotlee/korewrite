@@ -38,7 +38,7 @@ How might we enable macOS users to instantly fix speech-to-text transcription er
 - **macOS Quick Action / Service:**
   Standard macOS Quick Action / Service wrapper to capture highlighted text from any application.
 - **Diff & Confirm Popup:**
-  A lightweight native modal / floating dialog (Swift / Webview / osascript dialog) showing the diff with `[Apply]` (`Enter`) and `[Cancel]` (`Esc`).
+  A lightweight native modal / floating dialog (SwiftUI + AppKit NSPanel) showing the diff with `[Apply]` (`Enter`) and `[Cancel]` (`Esc`).
 - **In-Place Text Replacement:**
   Automated clipboard swap and `Cmd+V` dispatch with clipboard restoration.
 
@@ -51,9 +51,9 @@ How might we enable macOS users to instantly fix speech-to-text transcription er
 - **Complex Rich-Text WYSIWYG Formatting Preservation:**
   Speech-to-text output is predominantly plain text.
   Preserving complex HTML/RTF structures adds massive fragility across varied macOS text engines.
-- **Heavy Electron Wrapper App:**
-  Avoid large memory footprint.
-  Keep it as a lightweight native Swift or shell/python daemon with minimal resource consumption.
+- **Heavy Electron / Webview Wrapper App:**
+  Avoid large memory footprint and runtime latency.
+  Built purely with native Swift (SwiftUI / AppKit) for minimal resource consumption.
 
 ## Open Questions
 - Should each `*.md` file represent a separate entry in the macOS Context Menu (Services), or should a single "KoRewrite..." Service open a fast search/picker HUD? 

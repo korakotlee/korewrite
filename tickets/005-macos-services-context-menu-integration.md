@@ -18,7 +18,7 @@ Implement native macOS Services and Quick Actions integration with in-place text
 
 ### 4. Technical Context / Notes
 * **Affected Areas:** macOS Services, Automator workflow scripts, accessibility helper.
-* **Suggested Approach / Architectural Hints:** Package Automator Quick Actions or Swift Service Provider that invokes the KoRewrite binary with the chosen style parameter.
+* **Suggested Approach / Architectural Hints:** Package native macOS Automator Quick Actions / `.workflow` service bundles that invoke the compiled Swift binary (`korewrite`) with the selected style parameter.
 * **Blockers or Dependencies:** [003-core-cli-engine.md](file:///Users/korakot/dev/korewrite/tickets/003-core-cli-engine.md), [004-diff-preview-hud-ui.md](file:///Users/korakot/dev/korewrite/tickets/004-diff-preview-hud-ui.md).
 
 ### 5. Alternatives Considered

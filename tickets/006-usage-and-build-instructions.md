@@ -11,15 +11,15 @@ Write comprehensive build instructions, local development workflow, and test run
 
 ### 3. Proposed Solution / Acceptance Criteria
 - [ ] Document prerequisites and required macOS permissions (Accessibility).
-- [ ] Provide command to build the project from source.
-- [ ] Provide command to execute automated unit and integration tests.
+- [ ] Provide command to build the project from source (`swift build -c release`).
+- [ ] Provide command to execute automated unit and integration tests (`swift test`).
 - [ ] Detail the one-line installer command to install/update Services in `~/Library/Services/`.
 - [ ] Document how to add custom prompt files in `~/.korewrite/`.
 - [ ] Provide troubleshooting steps for `agy` detection and permission errors.
 
 ### 4. Technical Context / Notes
 * **Affected Areas:** `USAGE.md`.
-* **Suggested Approach / Architectural Hints:** Keep commands reproducible with copy-paste terminal snippets.
+* **Suggested Approach / Architectural Hints:** Detail `swift build`, `swift test`, and service installation scripts with copy-paste terminal snippets.
 * **Blockers or Dependencies:** [003-core-cli-engine.md](file:///Users/korakot/dev/korewrite/tickets/003-core-cli-engine.md), [005-macos-services-context-menu-integration.md](file:///Users/korakot/dev/korewrite/tickets/005-macos-services-context-menu-integration.md).
 
 ### 5. Alternatives Considered

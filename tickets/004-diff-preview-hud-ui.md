@@ -18,11 +18,12 @@ Build the floating diff preview and confirmation HUD modal according to the desi
 
 ### 4. Technical Context / Notes
 * **Affected Areas:** UI modal component, HUD presenter.
-* **Suggested Approach / Architectural Hints:** Native SwiftUI / AppKit floating panel (`NSPanel` with `.nonactivatingPanel` level) or lightweight Webview HUD for rapid iteration.
+* **Suggested Approach / Architectural Hints:** Native SwiftUI embedded in an AppKit floating panel (`NSPanel` with `.nonactivatingPanel` styleMask and `.floating` level) for zero-latency, translucent vibrancy.
 * **Blockers or Dependencies:** [001-design-system-spec.md](file:///Users/korakot/dev/korewrite/tickets/001-design-system-spec.md).
 
 ### 5. Alternatives Considered
 * Immediate silent replacement without preview, rejected because speech-to-text corrections require user verification before overwriting text.
+* Webview / Electron floating window, rejected due to memory bloat and startup latency.
 
 ### 6. Visuals & Logs (Optional)
 * Screenshot or video of HUD appearing over active applications.
