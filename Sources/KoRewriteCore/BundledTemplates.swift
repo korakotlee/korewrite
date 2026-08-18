@@ -12,6 +12,9 @@ public struct BundledTemplates {
     """
 
     public static let politePrompt: String = """
+    ---
+    name: KoRewrite - Polite
+    ---
     Apply a polite, considerate, and courteous tone.
     - Soften harsh demands into respectful, cooperative phrasing without sounding overly submissive or verbose.
     - Express gratitude and warm professionalism where appropriate.
@@ -19,6 +22,9 @@ public struct BundledTemplates {
     """
 
     public static let professionalPrompt: String = """
+    ---
+    name: KoRewrite - Professional
+    ---
     Apply a polished, professional, and workplace-ready tone.
     - Use clear, authoritative, and structured business language.
     - Eliminate colloquialisms, slang, and spoken-filler words while maintaining directness.
@@ -26,18 +32,27 @@ public struct BundledTemplates {
     """
 
     public static let casualPrompt: String = """
+    ---
+    name: KoRewrite - Casual
+    ---
     Apply a friendly, conversational, and casual tone.
     - Make the writing feel natural, warm, and approachable as if speaking directly to a close colleague or friend.
     - Keep phrasing simple and relaxed without sacrificing clarity or grammatical correctness.
     """
 
     public static let concisePrompt: String = """
+    ---
+    name: KoRewrite - Concise
+    ---
     Apply maximum brevity and high-signal clarity.
     - Cut unnecessary words, pleasantries, filler phrases, and passive constructions.
     - Deliver the core point directly in the fewest possible words without losing crucial context or nuance.
     """
 
     public static let sriburapaPrompt: String = """
+    ---
+    name: KoRewrite - Sriburapa
+    ---
     Apply the refined, romantic, and dignified literary prose style of Sriburapa (Kulap Saipradit).
     - Employ elegant, rhythmic Thai sentence structures with emotional depth and moral conviction.
     - Choose classic, poetic vocabulary with timeless resonance.
@@ -45,6 +60,9 @@ public struct BundledTemplates {
     """
 
     public static let storyPrompt: String = """
+    ---
+    name: KoRewrite - Story
+    ---
     Apply an engaging, cinematic, and narrative storytelling style.
     - Frame ideas with vivid sensory details, compelling progression, and strong narrative voice.
     - Use dynamic pacing to build curiosity, tension, and memorable insights.
@@ -52,6 +70,9 @@ public struct BundledTemplates {
     """
 
     public static let thaiOfficialPrompt: String = """
+    ---
+    name: KoRewrite - Thai Official
+    ---
     Apply a formal, structured, and authoritative Thai administrative and official document style (หนังสือราชการ).
     - Use formal Thai bureaucratic syntax, standard official vocabulary, and precise administrative conventions.
     - Maintain utmost clarity, diplomatic neutrality, and respectful decorum.

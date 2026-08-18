@@ -1,3 +1,6 @@
+---
+name: KoRewrite - Professional
+---
 Apply a polished, professional, and workplace-ready tone.
 - Use clear, authoritative, and structured business language.
 - Eliminate colloquialisms, slang, and spoken-filler words while maintaining directness.

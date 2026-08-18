@@ -100,4 +100,69 @@ struct PromptTemplateManagerTests {
             try manager.loadStylePrompt(named: "non-existent-style")
         }
     }
+
+    @Test func testFrontmatterParsingAndStripping() throws {
+        let rawContent = """
+        ---
+        name: KoRewrite - Super Casual
+        displayName: Ignored Secondary
+        version: "1.0"
+        ---
+        Make this text sound super friendly and relaxed.
+        """
+
+        let (metadata, body) = PromptTemplateManager.parseFrontmatter(rawContent)
+        #expect(metadata["name"] == "KoRewrite - Super Casual")
+        #expect(metadata["displayName"] == "Ignored Secondary")
+        #expect(metadata["version"] == "1.0")
+        #expect(body.trimmingCharacters(in: .whitespacesAndNewlines) == "Make this text sound super friendly and relaxed.")
+    }
+
+    @Test func testDisplayNameResolutionWithFrontmatterAndFallback() throws {
+        let tempDir = FileManager.default.temporaryDirectory
+            .appendingPathComponent("korewrite-test-\(UUID().uuidString)")
+        defer { try? FileManager.default.removeItem(at: tempDir) }
+
+        let manager = PromptTemplateManager(configDirectory: tempDir)
+        try manager.bootstrap()
+
+        // 1. Check bundled template display names
+        #expect(manager.getDisplayName(for: "polite") == "KoRewrite - Polite")
+        #expect(manager.getDisplayName(for: "thai-official") == "KoRewrite - Thai Official")
+
+        // 2. Custom template with explicit frontmatter name
+        let customWithFrontmatter = """
+        ---
+        name: KoRewrite - Executive Brief
+        ---
+        Summarize and refine for C-level executives.
+        """
+        let execURL = tempDir.appendingPathComponent("exec.md")
+        try customWithFrontmatter.write(to: execURL, atomically: true, encoding: .utf8)
+
+        #expect(manager.getDisplayName(for: "exec") == "KoRewrite - Executive Brief")
+        let loadedExec = try manager.loadStylePrompt(named: "exec")
+        #expect(loadedExec == "Summarize and refine for C-level executives.")
+        #expect(!loadedExec.contains("---"))
+
+        // 3. Custom template with displayName frontmatter
+        let customWithDisplayName = """
+        ---
+        displayName: KoRewrite - Modern Slang
+        ---
+        Rewrite with modern slang.
+        """
+        let slangURL = tempDir.appendingPathComponent("slang.md")
+        try customWithDisplayName.write(to: slangURL, atomically: true, encoding: .utf8)
+        #expect(manager.getDisplayName(for: "slang") == "KoRewrite - Modern Slang")
+
+        // 4. Custom template without frontmatter (fallback title-cased formatting)
+        let customNoFrontmatter = "Plain prompt without frontmatter"
+        let plainURL = tempDir.appendingPathComponent("my-custom_style.md")
+        try customNoFrontmatter.write(to: plainURL, atomically: true, encoding: .utf8)
+
+        #expect(manager.getDisplayName(for: "my-custom_style") == "KoRewrite - My Custom Style")
+        let loadedPlain = try manager.loadStylePrompt(named: "my-custom_style")
+        #expect(loadedPlain == "Plain prompt without frontmatter")
+    }
 }

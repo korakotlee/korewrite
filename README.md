@@ -166,6 +166,14 @@ echo "can u send me the doc ASAP" | korewrite --style concise
 korewrite --list-styles
 ```
 
+### Refreshing & Synchronizing macOS Services
+
+When adding, editing, or deleting templates in `~/.korewrite/`, dynamically update your right-click Services menu and prune orphaned workflows:
+
+```bash
+korewrite --refresh
+```
+
 ---
 
 ## Included Prompt Presets
@@ -180,8 +188,16 @@ korewrite --list-styles
 | **`story`** | Vivid, narrative-driven storytelling style. |
 | **`thai-official`** | Formal and bureaucratic Thai administrative tone. |
 
-To add a custom style, create `~/.korewrite/[my-style].md`.
-It is automatically detected by the CLI and macOS Services.
+To add a custom style, create `~/.korewrite/[my-style].md` with optional YAML frontmatter for display name:
+
+```markdown
+---
+name: KoRewrite - Executive Brief
+---
+Summarize and polish for executive communication.
+```
+
+Then run `korewrite --refresh` to immediately update your macOS Quick Actions menu.
 
 ---
 

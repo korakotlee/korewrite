@@ -142,7 +142,7 @@ swift test --filter CLIParsingTests
 
 KoRewrite registers native macOS Quick Actions inside `~/Library/Services/` so that rewrite presets appear in the right-click context menu across all Mac applications (Mail, Slack, Notes, Safari, Chrome, VS Code).
 
-### Automated Installation (Recommended)
+### Automated Installation & Dynamic Refresh (Recommended)
 
 Run the included installer script:
 
@@ -155,6 +155,16 @@ Or invoke the built-in CLI installation flag:
 ```bash
 korewrite --install-services
 ```
+
+### Synchronizing & Refreshing Services
+
+When you add new styles, modify existing ones, or delete obsolete markdown files in `~/.korewrite/`, run `--refresh` to automatically prune deleted workflows, update active workflows, and flush the macOS pasteboard cache:
+
+```bash
+korewrite --refresh
+```
+
+This ensures macOS context menus update immediately without restarting your machine.
 
 ### Manual Installation Steps
 
@@ -236,11 +246,14 @@ korewrite --init-templates
 korewrite --list-styles
 ```
 
-### Adding a Custom Preset
+### Adding a Custom Preset with YAML Frontmatter
 
 Create a new markdown file in `~/.korewrite/` (e.g. `~/.korewrite/executive.md`):
 
 ```markdown
+---
+name: KoRewrite - Executive Summary
+---
 # Role: Executive Summary Rewriter
 
 Rewrite the selected text for high-level executive communication:
@@ -249,7 +262,10 @@ Rewrite the selected text for high-level executive communication:
 - Maintain a clear, authoritative, and concise tone.
 ```
 
-The new style `executive` is immediately available to the CLI (`korewrite --style executive`) and right-click Services menu without recompiling.
+- **Frontmatter**: Use `name:` or `displayName:` to customize the menu title. If omitted, KoRewrite automatically falls back to a clean, title-cased name derived from the file name (e.g. `thai-formal.md` becomes `KoRewrite - Thai Formal`).
+- **Prompt Stripping**: The frontmatter block is automatically stripped before sending instructions to the AI backend.
+
+Run `korewrite --refresh` after creating or deleting templates to synchronize your macOS Services context menu.
 
 ---
 

@@ -44,13 +44,35 @@ struct KoRewriteCLI {
         if args.contains("--install-services") || args.contains("install-services") {
             do {
                 let generator = ServiceWorkflowGenerator()
-                let installed = try generator.installServices()
+                let installed = try generator.installServices(templateManager: manager)
                 print("Successfully installed \(installed.count) KoRewrite Services to ~/Library/Services/:")
                 for url in installed {
                     print("  - \(url.lastPathComponent)")
                 }
             } catch {
                 fputs("Error installing services: \(error.localizedDescription)\n", stderr)
+                exit(1)
+            }
+            return
+        }
+
+        if args.contains("--refresh") || args.contains("refresh") {
+            do {
+                let generator = ServiceWorkflowGenerator()
+                let result = try generator.syncServices(templateManager: manager)
+                print("Synchronized KoRewrite Services in ~/Library/Services/:")
+                if !result.pruned.isEmpty {
+                    print("  Pruned \(result.pruned.count) orphan workflow(s):")
+                    for url in result.pruned {
+                        print("    - \(url.lastPathComponent)")
+                    }
+                }
+                print("  Installed/Updated \(result.installed.count) active service(s):")
+                for url in result.installed {
+                    print("    - \(url.lastPathComponent)")
+                }
+            } catch {
+                fputs("Error refreshing services: \(error.localizedDescription)\n", stderr)
                 exit(1)
             }
             return
@@ -210,6 +232,7 @@ struct KoRewriteCLI {
           --list-styles           List all available styles
           --init-templates        Initialize ~/.korewrite with default templates
           --install-services      Install macOS Services to ~/Library/Services/
+          --refresh               Synchronize and refresh macOS Services with ~/.korewrite templates
           --check                 Check if agy binary is available
           -h, --help              Show help information
         """)

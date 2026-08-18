@@ -174,6 +174,44 @@ public final class ServiceWorkflowGenerator: @unchecked Sendable {
         """
     }
 
+    /// Resolves active ServiceDefinition list dynamically from prompt templates in PromptTemplateManager.
+    public func resolveServices(from templateManager: PromptTemplateManager = PromptTemplateManager()) -> [ServiceDefinition] {
+        let styles = templateManager.listStyles()
+        return styles.map { style in
+            let displayName = templateManager.getDisplayName(for: style)
+            return ServiceDefinition(style: style, displayName: displayName)
+        }
+    }
+
+    /// Scans destination directory and removes orphan `KoRewrite - *.workflow` bundles that do not match active services.
+    @discardableResult
+    public func pruneOrphanWorkflows(
+        in destinationDirectory: URL,
+        activeServices: [ServiceDefinition]
+    ) throws -> [URL] {
+        guard fileManager.fileExists(atPath: destinationDirectory.path),
+              let items = try? fileManager.contentsOfDirectory(atPath: destinationDirectory.path) else {
+            return []
+        }
+
+        let activeWorkflowNames = Set(activeServices.map { $0.workflowName })
+        var removedURLs: [URL] = []
+
+        for item in items {
+            guard item.hasPrefix("KoRewrite - ") && item.hasSuffix(".workflow") else {
+                continue
+            }
+
+            if !activeWorkflowNames.contains(item) {
+                let itemURL = destinationDirectory.appendingPathComponent(item)
+                try fileManager.removeItem(at: itemURL)
+                removedURLs.append(itemURL)
+            }
+        }
+
+        return removedURLs
+    }
+
     /// Creates and writes all workflow bundles to the specified directory.
     @discardableResult
     public func createWorkflowBundles(
@@ -207,19 +245,44 @@ public final class ServiceWorkflowGenerator: @unchecked Sendable {
         return installedURLs
     }
 
-    /// Installs default workflows to ~/Library/Services and refreshes the macOS pasteboard server.
+    /// Synchronizes workflows in ~/Library/Services/ with active PromptTemplateManager styles,
+    /// removing orphaned workflows and flushing macOS pasteboard cache.
+    @discardableResult
+    public func syncServices(
+        templateManager: PromptTemplateManager = PromptTemplateManager(),
+        customServicesDirectory: URL? = nil,
+        customBinaryPath: String? = nil
+    ) throws -> (installed: [URL], pruned: [URL]) {
+        let servicesDir = customServicesDirectory ?? fileManager.homeDirectoryForCurrentUser
+            .appendingPathComponent("Library/Services", isDirectory: true)
+
+        let activeServices = resolveServices(from: templateManager)
+        let pruned = try pruneOrphanWorkflows(in: servicesDir, activeServices: activeServices)
+        let installed = try createWorkflowBundles(
+            in: servicesDir,
+            services: activeServices,
+            customBinaryPath: customBinaryPath
+        )
+
+        refreshMacOSServices()
+        return (installed: installed, pruned: pruned)
+    }
+
+    /// Installs workflows to ~/Library/Services and refreshes the macOS pasteboard server.
     @discardableResult
     public func installServices(
-        services: [ServiceDefinition] = ServiceWorkflowGenerator.defaultServices,
+        services: [ServiceDefinition]? = nil,
+        templateManager: PromptTemplateManager = PromptTemplateManager(),
         customServicesDirectory: URL? = nil,
         customBinaryPath: String? = nil
     ) throws -> [URL] {
+        let targetServices = services ?? resolveServices(from: templateManager)
         let servicesDir = customServicesDirectory ?? fileManager.homeDirectoryForCurrentUser
             .appendingPathComponent("Library/Services", isDirectory: true)
 
         let urls = try createWorkflowBundles(
             in: servicesDir,
-            services: services,
+            services: targetServices,
             customBinaryPath: customBinaryPath
         )
 
