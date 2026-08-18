@@ -9,7 +9,7 @@
 
 **Native macOS in-place text rewriting and speech-to-text post-processing tool powered by Antigravity (`agy`).**
 
-[Quick Start](#-quick-start) • [Features](#-features) • [Architecture](#-architecture) • [Usage Guide](file:///Users/korakot/dev/korewrite/USAGE.md) • [Design System](file:///Users/korakot/dev/korewrite/DESIGN.md)
+[Prerequisites](#prerequisites) • [Quick Start](#quick-start) • [Features](#features) • [Architecture](#architecture) • [Usage Guide](USAGE.md) • [Design System](DESIGN.md)
 
 </div>
 
@@ -17,8 +17,7 @@
 
 ## Overview
 
-KoRewrite is a native macOS utility that polishes speech-to-text transcriptions, corrects grammatical mistakes, and restyles selected text across any macOS application.
-It integrates directly into the macOS Services right-click context menu and presents an interactive, glassmorphic floating HUD with live diff highlighting before replacing text in-place.
+KoRewrite is a native macOS utility that polishes speech-to-text transcriptions, corrects grammar, and restyles selected text across any application. Whether dictating an email with voice-to-text or jotting down a rough draft, simply select the text, right-click to trigger a rewrite preset, and inspect the live diff in an interactive glassmorphic HUD before replacing the content in place.
 
 ```
 +-----------------------------------------------------------------------+
@@ -62,10 +61,51 @@ graph TD
 
 ---
 
+## Prerequisites
+
+Ensure your system meets the following requirements before setting up KoRewrite:
+
+1. **macOS Sonoma (14.0+) / Sequoia / Tahoe (26.0+)**
+   - Uses native AppKit and Accessibility APIs.
+
+2. **Google Antigravity CLI (`agy`) & OAuth Authentication**
+   - KoRewrite leverages the local `agy` engine for LLM rewrites.
+   - Verify installation and log in:
+     ```bash
+     agy --version
+     agy auth login
+     ```
+
+3. **Swift 6.0+ Toolchain** *(Required for building from source)*
+   - Included with Xcode 16+ or Command Line Tools (`xcode-select --install`).
+   - Verify toolchain:
+     ```bash
+     swift --version
+     ```
+
+4. **User Binary Path (`~/.local/bin`)**
+   - Ensure `~/.local/bin` is present in your shell's `$PATH` (e.g. in `~/.zshrc`):
+     ```bash
+     export PATH="$HOME/.local/bin:$PATH"
+     ```
+
+5. **macOS Accessibility Privileges**
+   - Required to perform in-place text replacement in active applications.
+
+---
+
 ## Quick Start
 
-### 1. Build and Install
+### 1. Install Binary
 
+**Option A: Pre-built Binary**
+Download the latest `korewrite` release binary and place it in your `PATH`:
+```bash
+chmod +x korewrite
+mv korewrite ~/.local/bin/
+```
+
+**Option B: Build from Source**
 ```bash
 # Clone the repository
 git clone https://github.com/korakot/korewrite.git
@@ -76,16 +116,18 @@ swift build -c release
 
 # Install CLI binary to ~/.local/bin
 mkdir -p ~/.local/bin
-When I click the copy button, the dialog page UD is still present, but it clear the screen, but it's still display, I have to click the cancel again. 
+cp .build/release/korewrite ~/.local/bin/
 ```
 
 ### 2. Register macOS Services
 
-Run the automated installer script to register Quick Actions in `~/Library/Services/`:
+Register the Quick Action services in `~/Library/Services/` directly via the CLI:
 
 ```bash
-./scripts/install-services.sh
+korewrite --install-services
 ```
+
+*(If working from the cloned repo, `./scripts/install-services.sh` also works).*
 
 ### 3. Grant Accessibility Permissions
 
