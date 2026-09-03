@@ -234,7 +234,7 @@ KoRewrite dynamically loads prompt templates from `~/.korewrite/`.
 
 ### Initializing Default Presets
 
-Seeds default starter templates (`system.md`, `polite.md`, `professional.md`, `casual.md`, `concise.md`, `sriburapa.md`, `story.md`, `thai-official.md`):
+Seeds default starter templates (`system.md`, `polite.md`, `professional.md`, `casual.md`, `concise.md`, `sriburapa.md`, `story.md`, `thai-official.md`, `translate-to-english.md`, `translate-to-thai.md`):
 
 ```bash
 korewrite --init-templates
@@ -296,6 +296,18 @@ Run `korewrite --refresh` after creating or deleting templates to synchronize yo
    tccutil reset Accessibility
    ```
 3. Restart the host application and re-grant permissions when prompted.
+
+### Process Execution Timeout
+ 
+**Symptom**: `Process execution timed out after X seconds.`
+ 
+**Resolution**:
+1. By default, KoRewrite provides a generous 300-second (5-minute) execution timeout and invokes `agy` with `--effort low` to ensure fast processing for rewriting tasks.
+2. For extremely large texts or slow network conditions, increase the timeout using the `--timeout` flag:
+   ```bash
+   korewrite --style professional --timeout 600 --text "<very long text>"
+   ```
+3. If using macOS Quick Actions, re-run `korewrite --refresh` to ensure installed service workflows use the updated 300-second timeout.
 
 ### Inspecting Logs
 
