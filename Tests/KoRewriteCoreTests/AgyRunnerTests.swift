@@ -32,10 +32,27 @@ struct AgyRunnerTests {
         let invocation = try #require(mockRunner.recordedInvocations.first)
         #expect(invocation.executableURL.path == "/usr/local/bin/agy")
         #expect(invocation.arguments.contains("-p"))
+        #expect(invocation.arguments.contains("--effort"))
+        #expect(invocation.arguments.contains("low"))
         #expect(invocation.arguments.contains("--disable-slash-commands"))
         #expect(invocation.arguments.contains("--output-format"))
         #expect(invocation.arguments.contains("text"))
         #expect(invocation.timeout == 5.0)
+    }
+
+    @Test func testDefaultTimeoutIs300Seconds() async throws {
+        let mockRunner = MockProcessRunner(
+            result: .success(ProcessResult(exitCode: 0, stdout: "output", stderr: ""))
+        )
+        let mockLocator = MockBinaryLocator(resolvedURL: URL(fileURLWithPath: "/usr/local/bin/agy"))
+        let runner = AgyRunner(
+            processRunner: mockRunner,
+            binaryLocator: mockLocator
+        )
+
+        _ = try await runner.rewrite(text: "hello", style: "polite")
+        let invocation = try #require(mockRunner.recordedInvocations.first)
+        #expect(invocation.timeout == 300.0)
     }
 
     @Test func testBinaryNotFoundThrowsError() async {

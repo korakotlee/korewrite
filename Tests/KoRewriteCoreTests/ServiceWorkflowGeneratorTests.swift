@@ -22,8 +22,22 @@ struct ServiceWorkflowGeneratorTests {
 
         #expect(wflow.contains("--style &quot;sriburapa&quot;"))
         #expect(wflow.contains("--hud"))
+        #expect(wflow.contains("--timeout 300"))
         #expect(wflow.contains("com.apple.RunShellScript"))
         #expect(wflow.contains("com.apple.Automator.servicesMenu"))
+    }
+
+    @Test("Default services contains translation services")
+    func testDefaultServicesIncludesTranslationServices() {
+        let translateEnService = ServiceWorkflowGenerator.defaultServices.first { $0.style == "translate-to-english" }
+        #expect(translateEnService != nil)
+        #expect(translateEnService?.displayName == "KoRewrite - Translate to English")
+        #expect(translateEnService?.workflowName == "KoRewrite - Translate to English.workflow")
+
+        let translateThService = ServiceWorkflowGenerator.defaultServices.first { $0.style == "translate-to-thai" }
+        #expect(translateThService != nil)
+        #expect(translateThService?.displayName == "KoRewrite - Translate to Thai")
+        #expect(translateThService?.workflowName == "KoRewrite - Translate to Thai.workflow")
     }
 
     @Test("Workflow bundles are successfully written to destination directory")

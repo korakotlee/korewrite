@@ -13,6 +13,8 @@ struct PromptTemplateManagerTests {
         #expect(styles.contains("professional"))
         #expect(styles.contains("casual"))
         #expect(styles.contains("concise"))
+        #expect(styles.contains("translate-to-english"))
+        #expect(styles.contains("translate-to-thai"))
         #expect(!styles.contains("system"))
 
         let systemPrompt = try manager.loadSystemPrompt()
@@ -36,6 +38,8 @@ struct PromptTemplateManagerTests {
         #expect(results["professional.md"] == true)
         #expect(results["casual.md"] == true)
         #expect(results["concise.md"] == true)
+        #expect(results["translate-to-english.md"] == true)
+        #expect(results["translate-to-thai.md"] == true)
 
         let systemContent = try manager.loadSystemPrompt()
         #expect(systemContent.contains("Core Directives"))
@@ -129,6 +133,8 @@ struct PromptTemplateManagerTests {
         // 1. Check bundled template display names
         #expect(manager.getDisplayName(for: "polite") == "KoRewrite - Polite")
         #expect(manager.getDisplayName(for: "thai-official") == "KoRewrite - Thai Official")
+        #expect(manager.getDisplayName(for: "translate-to-english") == "KoRewrite - Translate to English")
+        #expect(manager.getDisplayName(for: "translate-to-thai") == "KoRewrite - Translate to Thai")
 
         // 2. Custom template with explicit frontmatter name
         let customWithFrontmatter = """
