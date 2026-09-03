@@ -24,7 +24,9 @@ public final class ServiceWorkflowGenerator: @unchecked Sendable {
         ServiceDefinition(style: "casual", displayName: "KoRewrite - Casual"),
         ServiceDefinition(style: "sriburapa", displayName: "KoRewrite - Sriburapa"),
         ServiceDefinition(style: "story", displayName: "KoRewrite - Story"),
-        ServiceDefinition(style: "thai-official", displayName: "KoRewrite - Thai Official")
+        ServiceDefinition(style: "thai-official", displayName: "KoRewrite - Thai Official"),
+        ServiceDefinition(style: "translate-to-english", displayName: "KoRewrite - Translate to English"),
+        ServiceDefinition(style: "translate-to-thai", displayName: "KoRewrite - Translate to Thai")
     ]
 
     public init(fileManager: FileManager = .default) {
@@ -33,145 +35,12 @@ public final class ServiceWorkflowGenerator: @unchecked Sendable {
 
     /// Generates the Info.plist XML content for a Quick Action Service workflow.
     public func generateInfoPlistXML(serviceName: String) -> String {
-        return """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-            <key>NSServices</key>
-            <array>
-                <dict>
-                    <key>NSMenuItem</key>
-                    <dict>
-                        <key>default</key>
-                        <string>\(serviceName)</string>
-                    </dict>
-                    <key>NSMessage</key>
-                    <string>runWorkflowAsService</string>
-                    <key>NSSendTypes</key>
-                    <array>
-                        <string>public.utf8-plain-text</string>
-                        <string>NSStringPboardType</string>
-                    </array>
-                </dict>
-            </array>
-        </dict>
-        </plist>
-        """
+        WorkflowTemplateBuilder.generateInfoPlistXML(serviceName: serviceName)
     }
 
     /// Generates the Automator document.wflow XML content invoking korewrite CLI with style and HUD.
     public func generateDocumentWflowXML(style: String, customBinaryPath: String? = nil) -> String {
-        let binary = customBinaryPath ?? "korewrite"
-        let script = """
-        export PATH="/usr/local/bin:/opt/homebrew/bin:$HOME/.local/bin:$HOME/.agy/bin:$PATH"
-        if command -v \(binary) >/dev/null 2>&1; then
-            \(binary) --style "\(style)" --hud
-        else
-            osascript -e 'display notification "korewrite binary not found in PATH." with title "KoRewrite Error"'
-        fi
-        """
-
-        // Escape XML entities in script
-        let escapedScript = script
-            .replacingOccurrences(of: "&", with: "&amp;")
-            .replacingOccurrences(of: "<", with: "&lt;")
-            .replacingOccurrences(of: ">", with: "&gt;")
-            .replacingOccurrences(of: "\"", with: "&quot;")
-
-        return """
-        <?xml version="1.0" encoding="UTF-8"?>
-        <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
-        <plist version="1.0">
-        <dict>
-            <key>AMApplicationBuild</key>
-            <string>526</string>
-            <key>AMApplicationVersion</key>
-            <string>2.10</string>
-            <key>AMDocumentVersion</key>
-            <string>2</string>
-            <key>actions</key>
-            <array>
-                <dict>
-                    <key>action</key>
-                    <dict>
-                        <key>AMAccepts</key>
-                        <dict>
-                            <key>Container</key>
-                            <string>List</string>
-                            <key>Optional</key>
-                            <true/>
-                            <key>Types</key>
-                            <array>
-                                <string>com.apple.cocoa.string</string>
-                            </array>
-                        </dict>
-                        <key>AMActionVersion</key>
-                        <string>2.0.3</string>
-                        <key>AMApplication</key>
-                        <array>
-                            <string>Automator</string>
-                        </array>
-                        <key>AMParameterProperties</key>
-                        <dict>
-                            <key>COMMAND_STRING</key>
-                            <dict/>
-                            <key>CheckedForUserDefaultShell</key>
-                            <dict/>
-                            <key>inputMethod</key>
-                            <dict/>
-                            <key>shell</key>
-                            <dict/>
-                            <key>source</key>
-                            <dict/>
-                        </dict>
-                        <key>AMProvides</key>
-                        <dict>
-                            <key>Container</key>
-                            <string>List</string>
-                            <key>Types</key>
-                            <array>
-                                <string>com.apple.cocoa.string</string>
-                            </array>
-                        </dict>
-                        <key>ActionBundlePath</key>
-                        <string>/System/Library/Automator/Run Shell Script.action</string>
-                        <key>ActionName</key>
-                        <string>Run Shell Script</string>
-                        <key>ActionParameters</key>
-                        <dict>
-                            <key>COMMAND_STRING</key>
-                            <string>\(escapedScript)</string>
-                            <key>CheckedForUserDefaultShell</key>
-                            <true/>
-                            <key>inputMethod</key>
-                            <integer>0</integer>
-                            <key>shell</key>
-                            <string>/bin/zsh</string>
-                            <key>source</key>
-                            <string></string>
-                        </dict>
-                        <key>BundleIdentifier</key>
-                        <string>com.apple.RunShellScript</string>
-                        <key>CFBundleVersion</key>
-                        <string>2.0.3</string>
-                    </dict>
-                </dict>
-            </array>
-            <key>connectors</key>
-            <dict/>
-            <key>workflowMetaData</key>
-            <dict>
-                <key>serviceInputTypeIdentifier</key>
-                <string>com.apple.Automator.text</string>
-                <key>serviceOutputTypeIdentifier</key>
-                <string>com.apple.Automator.nothing</string>
-                <key>workflowTypeIdentifier</key>
-                <string>com.apple.Automator.servicesMenu</string>
-            </dict>
-        </dict>
-        </plist>
-        """
+        WorkflowTemplateBuilder.generateDocumentWflowXML(style: style, customBinaryPath: customBinaryPath)
     }
 
     /// Resolves active ServiceDefinition list dynamically from prompt templates in PromptTemplateManager.
