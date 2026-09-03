@@ -36,7 +36,7 @@ KoRewrite is a native macOS utility that polishes speech-to-text transcriptions,
 - **One-Key In-Place Replacement**: Press `Enter` to confirm the rewrite and automatically paste the polished text back into the active application.
 - **Dynamic Markdown Presets**: Prompt templates live in `~/.korewrite/*.md`. Add or modify rewrite styles on the fly without recompiling.
 - **Local AI Execution**: Powered by your local Antigravity (`agy`) CLI engine with zero telemetry and complete privacy.
-- **Multilingual Support**: Out-of-the-box presets for English and Thai styles (Polite, Professional, Concise, Casual, Sriburapa, Story, and Thai Official).
+- **Multilingual Support**: Out-of-the-box presets for English and Thai styles (Polite, Professional, Concise, Casual, Sriburapa, Story, Thai Official, Translate to English, and Translate to Thai).
 
 ![alt text](docs/image.png)
 
@@ -160,6 +160,9 @@ korewrite --style polite --text "I am late today"
 
 # Rewrite text using standard input
 echo "can u send me the doc ASAP" | korewrite --style concise
+
+# Custom timeout (default is 300 seconds)
+korewrite --style polite --text "Long article..." --timeout 180
 ```
 
 ### Listing Available Styles
@@ -193,6 +196,8 @@ All prompt templates are stored as plain Markdown files in `~/.korewrite/`. You 
 | **`sriburapa`** | `~/.korewrite/sriburapa.md` | Literary prose inspired by Kulap Saipradit (Sriburapa). |
 | **`story`** | `~/.korewrite/story.md` | Vivid, narrative-driven storytelling style. |
 | **`thai-official`** | `~/.korewrite/thai-official.md` | Formal and bureaucratic Thai administrative tone. |
+| **`translate-to-english`** | `~/.korewrite/translate-to-english.md` | Accurate, fluent translation from any source language into natural English. |
+| **`translate-to-thai`** | `~/.korewrite/translate-to-thai.md` | Clear, natural, and fluent translation from any source language into Thai without literal translationese. |
 
 ### Inspecting & Modifying Existing Prompts
 

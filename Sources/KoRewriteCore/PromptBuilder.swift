@@ -24,7 +24,7 @@ public struct PromptBuilder: Sendable {
 \(inputText)
 
 [Output Instructions]
-Output ONLY the rewritten text directly. Do not include markdown preamble, explanations, greetings, quotes, or formatting wrappers unless specifically requested.
+Output ONLY the rewritten text directly. Do not call tools, run shell commands, or produce speech audio. Do not include markdown preamble, explanations, greetings, quotes, or formatting wrappers unless specifically requested.
 """
     }
 }

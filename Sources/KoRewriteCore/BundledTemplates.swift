@@ -7,7 +7,7 @@ public struct BundledTemplates {
     ## Core Directives
     1. Repair speech-to-text transcription errors, phonetic misrecognitions, homophone confusions, typos, grammatical slips, and missing/incorrect punctuation.
     2. Strictly preserve the original core meaning, intent, factual details, names, numbers, technical terms, code snippets, URLs, and entities.
-    3. Keep the original language (e.g., if input is in Thai, reply in Thai; if English, reply in English; if mixed, maintain natural bilingual flow).
+    3. Keep the original language (e.g., if input is in Thai, reply in Thai; if English, reply in English; if mixed, maintain natural bilingual flow), unless explicitly instructed otherwise (e.g., translation templates).
     4. Output ONLY the rewritten text. Never include explanations, conversational filler, preambles, notes, quotes, or markdown code fence wrappers (such as ```text) around the output.
     """
 
@@ -79,6 +79,26 @@ public struct BundledTemplates {
     - Organize paragraphs hierarchically with standard governmental phrasing and transitions.
     """
 
+    public static let translateToEnglishPrompt: String = """
+    ---
+    name: KoRewrite - Translate to English
+    ---
+    Translate the selected text from any source language into clear, natural, and fluent English.
+    - Faithfully convey the original meaning, intent, tone, and nuances.
+    - Preserve technical terms, brand names, code snippets, formulas, URLs, and markdown formatting.
+    - Ensure natural phrasing and correct English grammar without robotic or overly literal translation.
+    """
+
+    public static let translateToThaiPrompt: String = """
+    ---
+    name: KoRewrite - Translate to Thai
+    ---
+    Translate the selected text from any source language into clear, natural, and fluent Thai.
+    - Faithfully convey the original meaning, intent, tone, and nuances without robotic literal translation (สำนวนแปล).
+    - Preserve technical terms, brand names, code snippets, formulas, URLs, and markdown formatting.
+    - Ensure natural Thai sentence rhythm, correct vocabulary, and smooth readability.
+    """
+
     public static let all: [String: String] = [
         "system": systemPrompt,
         "polite": politePrompt,
@@ -87,7 +107,9 @@ public struct BundledTemplates {
         "concise": concisePrompt,
         "sriburapa": sriburapaPrompt,
         "story": storyPrompt,
-        "thai-official": thaiOfficialPrompt
+        "thai-official": thaiOfficialPrompt,
+        "translate-to-english": translateToEnglishPrompt,
+        "translate-to-thai": translateToThaiPrompt
     ]
 }
 

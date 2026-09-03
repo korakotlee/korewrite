@@ -31,7 +31,7 @@ public final class AgyRunner: Sendable {
     public func rewrite(
         text: String,
         style: String = "polite",
-        timeout: TimeInterval = 60.0
+        timeout: TimeInterval = 300.0
     ) async throws -> String {
         // 1. Locate binary
         guard let binaryURL = binaryLocator.locateBinary(named: binaryName) else {
@@ -61,6 +61,7 @@ public final class AgyRunner: Sendable {
         // 5. Execute process
         let arguments = [
             "-p", fullPrompt,
+            "--effort", "low",
             "--disable-slash-commands",
             "--output-format", "text"
         ]

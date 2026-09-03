@@ -95,7 +95,7 @@ struct KoRewriteCLI {
         }
 
         // Parse --timeout
-        var timeout: TimeInterval = 60.0
+        var timeout: TimeInterval = 300.0
         if let timeoutIdx = args.firstIndex(where: { $0 == "--timeout" }),
            timeoutIdx + 1 < args.count,
            let parsedTimeout = Double(args[timeoutIdx + 1]) {
@@ -228,7 +228,7 @@ struct KoRewriteCLI {
           -s, --style <name>      Rewrite style to apply (default: polite)
           -t, --text <text>       Input text to rewrite
           --hud                   Display floating diff preview HUD and paste in-place
-          --timeout <seconds>     Execution timeout in seconds (default: 60)
+          --timeout <seconds>     Execution timeout in seconds (default: 300)
           --list-styles           List all available styles
           --init-templates        Initialize ~/.korewrite with default templates
           --install-services      Install macOS Services to ~/Library/Services/

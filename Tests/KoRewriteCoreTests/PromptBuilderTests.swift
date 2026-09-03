@@ -19,6 +19,7 @@ struct PromptBuilderTests {
         #expect(assembled.contains(stylePrompt))
         #expect(assembled.contains(inputText))
         #expect(assembled.contains("Output ONLY the rewritten text"))
+        #expect(assembled.contains("Do not call tools, run shell commands, or produce speech audio"))
     }
 
     @Test func testEmptyInputThrowsError() {
